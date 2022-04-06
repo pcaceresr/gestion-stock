@@ -20,6 +20,7 @@
    <br>
         <button type="submit" class="btn btn-primary">Actualizar</button>
         <button type="submit" class="btn btn-primary">Volver al menú principal </button>
+        <a href="{{action('App\Http\Controllers\productoController@producto')}}" type="submit" class="btn btn-primary">Volver al menú principal</a>
     </center>
     </form>
 <//div>
