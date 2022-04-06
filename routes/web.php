@@ -16,3 +16,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('eliminar');
 });
+
+Route::get('/login','App\Http\Controllers\loginController@index');
