@@ -18,3 +18,21 @@ Route::get('/', function () {
 });
 
 Route::get('/login','App\Http\Controllers\loginController@index');
+
+Route::get('/menu','App\Http\Controllers\productoController@producto');
+
+Route::get('/menu/eliminar',[
+    'uses'=> 'App\Http\Controllers\productoController@eliminar'
+]);
+
+Route::get('/menu/agregar',[
+    'uses'=> 'App\Http\Controllers\productoController@agregar'
+]);
+
+Route::get('/menu/actualizar',[
+    'uses'=> 'App\Http\Controllers\productoController@actualizar'
+]);
+
+Route::get('/menu/consultar',[
+    'uses'=> 'App\Http\Controllers\productoController@consultar'
+]);
