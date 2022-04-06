@@ -20,7 +20,7 @@
                 <input class="form-check-input" type="checkbox" name="remember"> Recuerdame
             </label>
         </div>
-        <button type="submit" class="btn btn-primary">Enviar</button>
+        <a href="{{action('App\Http\Controllers\productoController@producto')}}" type="submit" class="btn btn-primary">Enviar</a>
     </form>
 <//div>
 @stop
