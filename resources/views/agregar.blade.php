@@ -6,7 +6,7 @@
         <br>
         <h2>Agregar producto</h2>
         <br>
-    <form action="/action_page.php">
+    <form action="" method="post">
         <div class="mb-3">
             &nbsp &nbsp<label for="" class="form-label">Codigo del producto:
             <input type="text" class="form-control" id="codigo"  name="codigo">

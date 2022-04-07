@@ -6,6 +6,7 @@
         <br>
         <h2>Iniciar sesión</h2>
     </center>
+    <div class="container">
     <form action="/action_page.php">
         <div class="mb-3 mt-3">
             &nbsp &nbsp<label for="email" class="form-label">Usuario:</label>
