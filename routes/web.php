@@ -36,3 +36,7 @@ Route::get('/menu/actualizar',[
 Route::get('/menu/consultar',[
     'uses'=> 'App\Http\Controllers\productoController@consultar'
 ]);
+
+Route::post('/guardarAgregar','App\Http\Controllers\productoController@guardarAgregar',
+   
+);
