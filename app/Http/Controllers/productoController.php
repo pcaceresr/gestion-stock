@@ -21,8 +21,21 @@ class productoController extends Controller
     public function actualizar(){
         return view('actualizar');
     }
-    
+
     public function consultar(){
         return view('consultar');
     }
+
+    public function guardarAgregar(Request $request){
+
+     $this ->validate($request,[
+         'codigo' => 'required',
+         'nombre' => 'required|min:3',
+         'cantidad' => 'required',
+     ]);
+
+        return 'Codigo'.$request->input('codigo');
+    }
+
+
 }
