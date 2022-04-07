@@ -22,7 +22,7 @@
    <br>
         <button type="submit" class="btn btn-primary">Agregar</button>
         @if($errors->any())
-                <div>
+                <div class="alert-danger">
                     <ul>
                         @foreach($errors->all() as $error)
                             <li>{{$error}}</li>

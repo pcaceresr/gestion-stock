@@ -14,10 +14,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('eliminar');
+    return view('login');
 });
 
 Route::get('/login','App\Http\Controllers\loginController@index');
+
+Route::post('/login', 'App\Http\Controllers\loginController@validarLogin');
+
 
 Route::get('/menu','App\Http\Controllers\productoController@producto');
 
@@ -37,6 +40,20 @@ Route::get('/menu/consultar',[
     'uses'=> 'App\Http\Controllers\productoController@consultar'
 ]);
 
+Route::post('/guardarConsultar','App\Http\Controllers\productoController@guardarConsultar',
+   
+);
+
 Route::post('/guardarAgregar','App\Http\Controllers\productoController@guardarAgregar',
    
 );
+
+Route::post('/guardarEliminar','App\Http\Controllers\productoController@guardarEliminar',
+   
+);
+
+Route::post('/guardarActualizar','App\Http\Controllers\productoController@guardarActualizar',
+   
+);
+
+

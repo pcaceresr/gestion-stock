@@ -6,7 +6,7 @@
         <br>
         <h2>Actualizar producto</h2>
         <br>
-    <form action="/action_page.php">
+    <form action="{{url('guardarActualizar')}}" method="post">
         <div class="mb-3">
             &nbsp &nbsp<label for="" class="form-label">Codigo del producto:
             <input type="text" class="form-control" id="codigo"  name="codigo">
@@ -19,7 +19,15 @@
    <br>
    <br>
         <button type="submit" class="btn btn-primary">Actualizar</button>
-        <button type="submit" class="btn btn-primary">Volver al menú principal </button>
+        @if($errors->any())
+                <div class="alert-danger">
+                    <ul>
+                        @foreach($errors->all() as $error)
+                            <li>{{$error}}</li>
+                        @endforeach
+                    </ul>
+                </div>
+        @endif
         <a href="{{action('App\Http\Controllers\productoController@producto')}}" type="submit" class="btn btn-primary">Volver al menú principal</a>
     </center>
     </form>

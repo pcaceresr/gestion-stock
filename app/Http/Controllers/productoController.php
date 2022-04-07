@@ -26,6 +26,16 @@ class productoController extends Controller
         return view('consultar');
     }
 
+    public function guardarConsultar(Request $request){
+
+        $this ->validate($request,[
+            'codigo' => 'required',
+            'nombre' => 'required|min:3',
+        ]);
+   
+           return 'Codigo'.$request->input('codigo');
+       }
+
     public function guardarAgregar(Request $request){
 
      $this ->validate($request,[
@@ -37,5 +47,25 @@ class productoController extends Controller
         return 'Codigo'.$request->input('codigo');
     }
 
+   public function guardarEliminar(Request $request){
+
+     $this ->validate($request,[
+         'codigo' => 'required',
+         'nombre' => 'required|min:3',
+         'cantidad' => 'required',
+     ]);
+
+        return 'Codigo'.$request->input('codigo');
+    }
+
+    public function guardarActualizar(Request $request){
+
+        $this ->validate($request,[
+            'codigo' => 'required',
+            'nombre' => 'required|min:3',
+        ]);
+   
+           return 'Codigo'.$request->input('codigo');
+       }
 
 }
