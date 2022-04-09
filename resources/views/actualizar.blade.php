@@ -15,8 +15,28 @@
             &nbsp &nbsp<label for="" class="form-label">Nombre del producto:
             <input type="text" class="form-control" id="nombre"  name="nombre">
         </div>
-   <br>
-   <br>
+        <div class="mb-3">
+            &nbsp &nbsp<label for="" class="form-label">Categoria:
+            <input type="text" class="form-control" id="categoria"  name="categoria">
+        </div>
+        <div class="mb-3">
+            &nbsp &nbsp<label for="" class="form-label">Cantidad:
+            <input type="number" class="form-control" id="cantidad"  name="cantidad">
+        </div>
+        <div class="mb-3">
+            &nbsp &nbsp<label for="" class="form-label">Precio de Venta:
+            <input type="number" class="form-control" id="precio"  name="precio">
+        </div>
+        <div>
+             <p>
+             Sucursal:
+                 <select name="sucursal">
+                     <option>Las Higueras</option>
+                     <option>Los Sauces</option>
+                     <option>Los Ulmos</option>
+                 </select>
+            </p>
+        </div>
    <br>
         <button type="submit" class="btn btn-primary">Actualizar</button>
         @if($errors->any())
