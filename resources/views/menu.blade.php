@@ -17,7 +17,7 @@
     </center>
     <br>
     <center>
-        <a href="{{action('App\Http\Controllers\loginController@index')}}"type="button" class="btn btn-outline-info btn-lg btn-block">Salir</a>
+        <a href="{{action('App\Http\Controllers\HomeController@index')}}"type="button" class="btn btn-outline-info btn-lg btn-block">Salir</a>
     </center>
     </form>
     <br>
