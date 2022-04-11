@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('login');
+    return view('welcome');
 });
 
 Route::get('/login','App\Http\Controllers\loginController@index');
@@ -57,3 +57,7 @@ Route::post('/guardarActualizar','App\Http\Controllers\productoController@guarda
 );
 
 
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
