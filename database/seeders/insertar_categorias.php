@@ -15,7 +15,7 @@ class insertar_categorias extends Seeder
     public function run()
     {
         //
-        for ($i=1; $i < 10 ; $i++) { 
+        for ($i=1; $i <= 10 ; $i++) { 
             DB::table('categorias')->insert(array(
                 'name' => 'categoria'.$i,
                 

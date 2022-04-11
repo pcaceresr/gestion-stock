@@ -10,5 +10,9 @@ class categoria extends Model
     protected $table= 'categorias';
     protected$primaryKey = 'id';
 
-    
+    public function productos(){
+        return $this->hasMany(producto::class);
+    }
+
+    use HasFactory;
 }
