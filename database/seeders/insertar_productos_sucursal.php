@@ -16,8 +16,8 @@ class insertar_productos_sucursal extends Seeder
     {
         //
         for ($i=1; $i < 10 ; $i++) { 
-            DB::table('productos_sucursal')->insert(array(
-                'name' => 'producto_sucursal'.$i,
+            DB::table('productossucursal')->insert(array(
+                'name' => 'productossucursal'.$i,
                 
             ));# code...
         }
