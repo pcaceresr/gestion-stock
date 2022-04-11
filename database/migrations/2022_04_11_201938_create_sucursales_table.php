@@ -1,9 +1,8 @@
-<?php
 
+<?php
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
 class CreateSucursalesTable extends Migration
 {
     /**
@@ -19,7 +18,6 @@ class CreateSucursalesTable extends Migration
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      *

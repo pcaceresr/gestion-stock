@@ -25,7 +25,7 @@ class insertar_productos_sucursal extends Seeder
         $this->command->info('Productos insertados con exito!');
     }
     public function obtenerProducto(){
-        return rand(55,64);
+        return rand(1,9);
         }
         
         public function obtenerSucursal(){

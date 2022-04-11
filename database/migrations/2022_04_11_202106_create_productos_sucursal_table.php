@@ -1,9 +1,7 @@
 <?php
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
 class CreateProductosSucursalTable extends Migration
 {
     /**
@@ -19,19 +17,15 @@ class CreateProductosSucursalTable extends Migration
             $table->unsignedBigInteger('sucursal_id')->unsigned();
          
             $table->timestamps();
-
             $table->foreign('producto_id')->references('id')->on('productos')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-
             $table->foreign('sucursal_id')->references('id')->on('sucursales')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
 
-
         });
     }
-
     /**
      * Reverse the migrations.
      *
