@@ -14,9 +14,10 @@ class CreateProductosTable extends Migration
         Schema::create('productos', function (Blueprint $table) {
             $table->id();
             $table->string('name',50);
-            $table->string('codigo')->unique();
+            $table->string('codigo')->uque();
             $table->integer('cantidad')->nullable();
             $table->integer('precioVenta')->nullable();
+		   $table->string('estado')->nullable();
             $table->unsignedBigInteger('categoria_id')->unsigned();
             $table->foreign('categoria_id')
                 ->references('id')
