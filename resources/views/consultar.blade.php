@@ -17,8 +17,9 @@
         </div>
         <div>
              <p>
-             Sucursal:
+             Sucursal(es):
                  <select name="sucursal">
+                     <option>Todas</option>
                      <option>Las Higueras</option>
                      <option>Los Sauces</option>
                      <option>Los Ulmos</option>
