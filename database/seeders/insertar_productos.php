@@ -21,7 +21,6 @@ class insertar_productos extends Seeder
             DB::table('productos')->insert(array(
                 'name' => 'producto'.$i,
                 'codigo' => 'codigo'.$i,
-                'cantidad' => $this->obtenerCantidad (),
                 'categoria_id' => $this->obtenerCategoria (),
                 
             ));# code...
@@ -33,9 +32,6 @@ class insertar_productos extends Seeder
         return rand(1,10);
     }
 
-    public function obtenerCantidad(){
-        return rand(1,100);
-    }
 
 }
 
