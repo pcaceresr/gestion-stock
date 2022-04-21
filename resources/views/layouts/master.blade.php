@@ -48,7 +48,7 @@
 <br>
     @section('footer')
         <center>
-            <h6>Guillermo-Ricardo-Paula</h6>
+            <h6>SistemStock 2022</h6>
         </center>    
     @show
 

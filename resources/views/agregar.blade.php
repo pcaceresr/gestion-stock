@@ -20,6 +20,10 @@
             <input type="text" class="form-control" id="categoria"  name="categoria">
         </div>
         <div class="mb-3">
+            &nbsp &nbsp<label for="" class="form-label">Descripción:
+            <input type="text" class="form-control" id="descripcion"  name="descripcion">
+        </div>
+        <div class="mb-3">
             &nbsp &nbsp<label for="" class="form-label">Cantidad:
             <input type="number" class="form-control" id="cantidad"  name="cantidad">
         </div>
