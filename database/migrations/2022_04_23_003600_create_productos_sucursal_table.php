@@ -24,6 +24,7 @@ class CreateProductosSucursalTable extends Migration
                 ->onUpdate('cascade');
             $table->integer('cantidad')->nullable();
             $table->integer('precioVenta')->nullable();
+            $table->primary(['producto_id', 'sucursal_id']);
         });
     }
     /**
