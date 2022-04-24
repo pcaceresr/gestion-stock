@@ -10,7 +10,7 @@ class sucursal extends Model
     protected $table= 'sucursales';
     protected$primaryKey = 'id';
 
-    public function productoSucursal(){
+    public function productoSucursales(){
         return $this->hasMany(productoSucursal::class);
 }
 }

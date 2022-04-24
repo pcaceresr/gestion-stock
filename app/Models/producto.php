@@ -10,16 +10,16 @@ class producto extends Model
     protected $table = 'productos';
     protected $primaryKey = 'id';
 
-    public function categoria()
+    public function categorias()
     {
         return $this->belongsTo(categoria::class);
     }
 
-    public function producto()
+    public function productosSucursal()
     {
-        return $this->belongsToMany(productoSucursal::class);
+        return $this->hasMany(productoSucursal::class);
     }
-        
+
     use HasFactory;
 
 }
