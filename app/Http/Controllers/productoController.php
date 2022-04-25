@@ -45,6 +45,61 @@ class productoController extends Controller
         return 'Codigo' . $request->input('codigo');
     }
 
+    public function verConsulta(Request $request)
+    {
+        $codigo = $request->codigo;
+        $name = $request->name;
+
+        if ($codigo == null && $name == null) {
+            return back()->withErrors(['errors' => 'debes ingresar el codigo o el nombre']);
+        }
+
+        $productosExistentes = [];
+
+        // $producto = producto::where(
+        //     function ($query) use ($codigo, $name) {
+
+        //         echo $codigo;
+        //         echo $name;
+        //         if ($codigo != null) {
+        //             $query->where('codigo', '=', $codigo);
+        //         }
+
+        //         if ($name != null) {
+        //             $query->where('name', 'like', $name . '%');
+        //         }
+
+        //     })
+        //     ->first();
+
+        if ($codigo != null) {
+            $producto = producto::where('codigo', '=', $codigo)->first();
+        }
+
+        // if ($name != null) {
+        //     error_log($name);
+        //     $producto = producto::where('name', '=', $name)->first();
+        // }
+
+        $productosExistentes = productoSucursal::where('producto_id', '=', $producto->id)
+            ->get()
+            ->load('sucursal')->load('producto');
+
+        error_log($productosExistentes);
+
+        if ($productosExistentes == null || count($productosExistentes) == 0) {
+            //enviar error 'producto no existe'
+            $mensajeError = 'producto no existe: ' . $codigo;
+            error_log($mensajeError);
+            return back()->withErrors(['errors' => $mensajeError]);
+        }
+
+        return view('consultar', [
+            'productosExistentes' => $productosExistentes,
+        ]);
+
+    }
+
     public function guardarAgregar(Request $request)
     {
 

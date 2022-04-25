@@ -12,7 +12,7 @@ class producto extends Model
 
     public function categorias()
     {
-        return $this->belongsTo(categoria::class);
+        return $this->belongsTo(categoria::class, 'categoria_id');
     }
 
     public function productosSucursal()
