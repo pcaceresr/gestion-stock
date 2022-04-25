@@ -33,6 +33,7 @@ Route::post('/menu/agregar', 'App\Http\Controllers\productoController@agregarPro
 Route::get('/menu/actualizar', ['uses' => 'App\Http\Controllers\productoController@actualizar']);
 
 Route::get('/menu/consultar', ['uses' => 'App\Http\Controllers\productoController@consultar']);
+Route::post('/menu/consultar', ['uses' => 'App\Http\Controllers\productoController@verConsulta']);
 
 Route::post('/guardarConsultar', 'App\Http\Controllers\productoController@guardarConsultar', );
 
