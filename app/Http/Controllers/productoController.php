@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\producto;
 use App\Models\productoSucursal;
+use App\Models\sucursal;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -192,6 +193,57 @@ class productoController extends Controller
         ]);
 
         return 'Codigo' . $request->input('codigo');
+    }
+
+    public function verEliminar(Request $request)
+    {
+        error_log('req:' . $request);
+
+        $codigo = $request->codigo;
+        $sucursalId = $request->sucursal;
+
+        $producto = new producto();
+        if ($codigo != null && $sucursalId == 'todas') {
+
+            $producto = producto::where('codigo', '=', $codigo)->first();
+
+            $productosExistentes = productoSucursal::where('producto_id', '=', $producto->id)
+                ->get()
+                ->load('sucursal')->load('producto');
+        } else if ($sucursalId != null && $codigo == null) {
+
+            if ($sucursalId == 'todas') {
+                $productosExistentes = productoSucursal::all()
+                    ->load('sucursal')->load('producto');
+            } else {
+                $productosExistentes = productoSucursal::where('sucursal_id', '=', $sucursalId)
+                    ->get()
+                    ->load('sucursal')->load('producto');
+            }
+
+        } else if ($codigo != null && $sucursalId != null) {
+
+            $producto = producto::where('codigo', '=', $codigo)->first();
+
+            $productosExistentes = productoSucursal::where('producto_id', '=', $producto->id)
+                ->where('sucursal_id', '=', $sucursalId)
+                ->get()
+                ->load('sucursal')->load('producto');
+        }
+
+        error_log($productosExistentes);
+
+        if ($productosExistentes == null || count($productosExistentes) == 0) {
+            //enviar error 'producto no existe'
+            $mensajeError = 'producto no existe: ' . $codigo;
+            error_log($mensajeError);
+            return back()->withErrors(['errors' => $mensajeError]);
+        }
+
+        return view('eliminar', [
+            'productosExistentes' => $productosExistentes,
+        ]);
+
     }
 
 }
