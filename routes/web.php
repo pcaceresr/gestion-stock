@@ -25,6 +25,7 @@ Route::get('/menu', 'App\Http\Controllers\productoController@producto');
 
 Route::get('/menu/eliminar', ['uses' => 'App\Http\Controllers\productoController@eliminar']);
 Route::post('/menu/eliminar', ['uses' => 'App\Http\Controllers\productoController@verEliminar']);
+Route::post('/menu/cambiarEstado', ['uses' => 'App\Http\Controllers\productoController@cambiarEstado']);
 
 //Ruta para agregar producto
 Route::get('/menu/agregar', ['uses' => 'App\Http\Controllers\productoController@agregar']);

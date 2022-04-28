@@ -35,38 +35,64 @@
                         </ul>
                     </div>
                 @endif
+
+                @isset($mensaje)
+                    <div class="alert-success">
+                        {{ $mensaje }}
+                    </div>
+                @endisset
                 <a href="{{ action('App\Http\Controllers\productoController@producto') }}" type="submit"
                     class="btn btn-primary">Volver al menú principal</a>
         </center>
         </form>
         <hr>
-        <table class="table">
-            <thead>
-                <th scope="col">Codigo</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Categoria</th>
-                <th scope="col">Descripcion</th>
-                <th scope="col">Precio Venta</th>
-                <th scope="col">Sucursal</th>
-                <th scope="col">Activar</th>
-                <th scope="col">Desactivar</th>
-            </thead>
-            <tbody>
-                @isset($productosExistentes)
-                    @foreach ($productosExistentes as $ps)
-                        <tr>
-                            <td>{{ $ps->producto->codigo }}</td>
-                            <td>{{ $ps->producto->name }}</td>
-                            <td>{{ $ps->producto->categoria_id }}</td>
-                            <td>{{ $ps->producto->descripcion }}</td>
-                            <td>{{ $ps->precioVenta }}</td>
-                            <td>{{ $ps->sucursal->name }}</td>
-                            <td> <button type="submit" class="btn btn-warning">Activo</button></td>
-                            <td><button type="submit" class="btn btn-danger">Inactivo</button></td>
-                        </tr>
-                    @endforeach
-                @endisset
-            </tbody>
-        </table>
-        </ /div>
-    @stop
+        <form id="formActualizarEstado" action="{{ url('/menu/eliminar') }}" method="post">
+            <table class="table">
+                <thead>
+                    <th scope="col">Codigo</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Categoria</th>
+                    <th scope="col">Descripcion</th>
+                    <th scope="col">Precio Venta</th>
+                    <th scope="col">Sucursal</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Opciones</th>
+                </thead>
+                <tbody>
+                    @isset($productosExistentes)
+                        @foreach ($productosExistentes as $ps)
+                            <tr>
+                                <td>{{ $ps->producto->codigo }}</td>
+                                <td>{{ $ps->producto->name }}</td>
+                                <td>{{ $ps->producto->categoria_id }}</td>
+                                <td>{{ $ps->producto->descripcion }}</td>
+                                <td>{{ $ps->precioVenta }}</td>
+                                <td>{{ $ps->sucursal->name }}</td>
+                                <td>{{ $ps->producto->estado }}</td>
+                                <td>
+                                    @if ($ps->producto->estado == 'ACTIVO')
+                                        <button class="btn btn-danger" name="accion" value="desactivar"
+                                            onclick="cambiarEstado({{ $ps->producto->id }})">Desactivar</button>
+                                    @else
+                                        <button class="btn btn-warning" name="accion" value="activar"
+                                            onclick="cambiarEstado({{ $ps->producto->id }})">Activar</button>
+                                    @endif
+
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endisset
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <script>
+        function cambiarEstado(id) {
+            var input = document.createElement("input");
+            input.type = "hidden";
+            input.value = id;
+            input.name = "productoId";
+            document.getElementById("formActualizarEstado").appendChild(input);
+        }
+    </script>
+@stop

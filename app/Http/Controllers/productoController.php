@@ -197,7 +197,12 @@ class productoController extends Controller
 
     public function verEliminar(Request $request)
     {
-        error_log('req:' . $request);
+        //error_log('verEliminar:' . $request);
+
+        if ($request->accion == 'desactivar' || $request->accion == 'activar') {
+            $this->cambiarEstado($request);
+            return view('eliminar', ['request' => $request]);
+        }
 
         $codigo = $request->codigo;
         $sucursalId = $request->sucursal;
@@ -231,7 +236,7 @@ class productoController extends Controller
                 ->load('sucursal')->load('producto');
         }
 
-        error_log($productosExistentes);
+        // error_log($productosExistentes);
 
         if ($productosExistentes == null || count($productosExistentes) == 0) {
             //enviar error 'producto no existe'
@@ -244,6 +249,35 @@ class productoController extends Controller
             'productosExistentes' => $productosExistentes,
         ]);
 
+    }
+
+    public function cambiarEstado(Request $request)
+    {
+        //error_log('cambiarEstado \n' . $request);
+
+        //actualizar estado de producto por producto_id
+
+        $accion = $request->accion;
+        $productoId = $request->productoId;
+        $estado = "";
+
+        if ($accion == "activar") {
+            $estado = "ACTIVO";
+        } else {
+            $estado = "DESACTIVADO";
+        }
+
+        error_log('accion=>' . $accion);
+        error_log('estado=>' . $estado);
+        error_log('productoId=>' . $productoId);
+
+        producto::where('id', '=', $productoId)->update(['estado' => $estado]);
+        error_log('producto=>' . 'QUI LLEG');
+
+        //TODO: no funciona mensaje de exito
+        return view('eliminar', [
+            'mensaje' => 'Producto "' . $productoId . '" actualizado exitosamente!',
+        ]);
     }
 
 }
