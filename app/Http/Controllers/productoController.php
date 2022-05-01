@@ -193,7 +193,13 @@ class productoController extends Controller
                 return view('eliminar', ['request' => $request]);
             }
 
+            if ($accion == 'eliminar') {
+                $this->eliminarProducto($request);
+                return view('eliminar', ['request' => $request]);
+            }
+
         } catch (Exception $e) {
+
             error_log($e->getMessage());
             error_log($e->getCode());
 
@@ -289,6 +295,41 @@ class productoController extends Controller
         $mensajeExito = 'Producto "' . $producto->codigo . '" actualizado exitosamente!';
 
         throw new Exception($mensajeExito);
+    }
+
+    public function eliminarProducto(Request $request)
+    {
+        try {
+            error_log('eliminarProducto');
+            // error_log($request);
+            $codigoProducto = $request->codigo;
+            $sucursalId = $request->sucursal;
+
+            if ($codigoProducto == null) {
+                throw new Exception('Ingrese codigo del producto');
+            }
+
+            $producto = producto::where('codigo', '=', $codigoProducto)->first();
+
+            if ($producto == null) {
+                throw new Exception('Producto no existe');
+            }
+
+            if ($sucursalId == 'todas') {
+                //
+                producto::where('id', $producto->id)->delete();
+            } else {
+                productoSucursal::where('producto_id', $producto->id)
+                    ->where('sucursal_id', $sucursalId)
+                    ->delete();
+
+            }
+
+            throw new Exception('Producto eliminado con exito');
+
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 
 }
