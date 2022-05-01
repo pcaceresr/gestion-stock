@@ -24,8 +24,8 @@
                     </p>
                 </div>
                 <br>
-                <button type="submit" class="btn btn-warning">Buscar</button>
-                <button type="submit" class="btn btn-danger">Eliminar</button>
+                <button type="submit" class="btn btn-warning" name="accion" value="buscar">Buscar</button>
+                <button type="submit" class="btn btn-danger" name="accion" value="eliminar">Eliminar</button>
                 @if ($errors->any())
                     <div class="alert-danger">
                         <ul>
@@ -68,14 +68,14 @@
                                 <td>{{ $ps->producto->descripcion }}</td>
                                 <td>{{ $ps->precioVenta }}</td>
                                 <td>{{ $ps->sucursal->name }}</td>
-                                <td>{{ $ps->producto->estado }}</td>
+                                <td>{{ $ps->estado }}</td>
                                 <td>
-                                    @if ($ps->producto->estado == 'ACTIVO')
+                                    @if ($ps->estado == 'ACTIVO')
                                         <button class="btn btn-danger" name="accion" value="desactivar"
-                                            onclick="cambiarEstado({{ $ps->producto->id }})">Desactivar</button>
+                                            onclick="cambiarEstado({{ $ps->producto->id }}, {{ $ps->sucursal->id }})">Desactivar</button>
                                     @else
                                         <button class="btn btn-warning" name="accion" value="activar"
-                                            onclick="cambiarEstado({{ $ps->producto->id }})">Activar</button>
+                                            onclick="cambiarEstado({{ $ps->producto->id }}, {{ $ps->sucursal->id }})">Activar</button>
                                     @endif
 
                                 </td>
@@ -84,14 +84,21 @@
                     @endisset
                 </tbody>
             </table>
+
         </form>
     </div>
     <script>
-        function cambiarEstado(id) {
+        function cambiarEstado(productoId, sucursalId) {
             var input = document.createElement("input");
             input.type = "hidden";
-            input.value = id;
+            input.value = productoId;
             input.name = "productoId";
+            document.getElementById("formActualizarEstado").appendChild(input);
+
+            var input = document.createElement("input");
+            input.type = "hidden";
+            input.value = sucursalId;
+            input.name = "sucursalId";
             document.getElementById("formActualizarEstado").appendChild(input);
         }
     </script>

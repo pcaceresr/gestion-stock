@@ -57,11 +57,9 @@ class productoController extends Controller
 
         $productosExistentes = [];
 
-
         if ($codigo != null) {
             $producto = producto::where('codigo', '=', $codigo)->first();
         }
-
 
         $productosExistentes = productoSucursal::where('producto_id', '=', $producto->id)
             ->get()
@@ -179,68 +177,96 @@ class productoController extends Controller
 
     public function verEliminar(Request $request)
     {
-        //error_log('verEliminar:' . $request);
+        $accion = $request->accion;
 
-        if ($request->accion == 'desactivar' || $request->accion == 'activar') {
-            $this->cambiarEstado($request);
-            return view('eliminar', ['request' => $request]);
-        }
+        try {
 
-        $codigo = $request->codigo;
-        $sucursalId = $request->sucursal;
-
-        $producto = new producto();
-        if ($codigo != null && $sucursalId == 'todas') {
-
-            $producto = producto::where('codigo', '=', $codigo)->first();
-
-            $productosExistentes = productoSucursal::where('producto_id', '=', $producto->id)
-                ->get()
-                ->load('sucursal')->load('producto');
-        } else if ($sucursalId != null && $codigo == null) {
-
-            if ($sucursalId == 'todas') {
-                $productosExistentes = productoSucursal::all()
-                    ->load('sucursal')->load('producto');
-            } else {
-                $productosExistentes = productoSucursal::where('sucursal_id', '=', $sucursalId)
-                    ->get()
-                    ->load('sucursal')->load('producto');
+            if ($accion == 'buscar') {
+                $productosExistentes = $this->buscarProductos($request);
+                return view('eliminar', [
+                    'productosExistentes' => $productosExistentes,
+                ]);
             }
 
-        } else if ($codigo != null && $sucursalId != null) {
+            if ($accion == 'desactivar' || $accion == 'activar') {
+                $this->cambiarEstado($request);
+                return view('eliminar', ['request' => $request]);
+            }
 
-            $producto = producto::where('codigo', '=', $codigo)->first();
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+            error_log($e->getCode());
 
-            $productosExistentes = productoSucursal::where('producto_id', '=', $producto->id)
-                ->where('sucursal_id', '=', $sucursalId)
-                ->get()
-                ->load('sucursal')->load('producto');
-        }
+            $mensajeError = $e->getMessage();
 
-        // error_log($productosExistentes);
+            if ($e->getCode() == '23000') {
+                $mensajeError = 'Producto ya existe en esta sucursal';
+            }
 
-        if ($productosExistentes == null || count($productosExistentes) == 0) {
-            //enviar error 'producto no existe'
-            $mensajeError = 'producto no existe: ' . $codigo;
-            error_log($mensajeError);
             return back()->withErrors(['errors' => $mensajeError]);
         }
 
-        return view('eliminar', [
-            'productosExistentes' => $productosExistentes,
-        ]);
+    }
 
+    public function buscarProductos(Request $request)
+    {
+        try {
+            $codigo = $request->codigo;
+            $sucursalId = $request->sucursal;
+            $productosExistentes = [];
+            $producto = new producto();
+
+            if ($codigo != null && $sucursalId == 'todas') {
+
+                $producto = producto::where('codigo', '=', $codigo)->first();
+
+                if ($producto != null) {
+                    $productosExistentes = productoSucursal::where('producto_id', '=', $producto->id)
+                        ->get()
+                        ->load('sucursal')->load('producto');
+                }
+
+            } else if ($sucursalId != null && $codigo == null) {
+
+                if ($sucursalId == 'todas') {
+                    $productosExistentes = productoSucursal::all()
+                        ->load('sucursal')->load('producto');
+                } else {
+                    $productosExistentes = productoSucursal::where('sucursal_id', '=', $sucursalId)
+                        ->get()
+                        ->load('sucursal')->load('producto');
+                }
+
+            } else if ($codigo != null && $sucursalId != null) {
+
+                $producto = producto::where('codigo', '=', $codigo)->first();
+
+                if ($producto != null) {
+                    $productosExistentes = productoSucursal::where('producto_id', '=', $producto->id)
+                        ->where('sucursal_id', '=', $sucursalId)
+                        ->get()
+                        ->load('sucursal')->load('producto');
+                }
+            }
+
+            if ($producto == null || $productosExistentes == null || count($productosExistentes) == 0) {
+                $mensajeError = 'Producto no existe : ' . $codigo;
+                throw new Exception($mensajeError, -1);
+            }
+
+            return $productosExistentes;
+
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 
     public function cambiarEstado(Request $request)
     {
-        //error_log('cambiarEstado \n' . $request);
-
         //actualizar estado de producto por producto_id
-
         $accion = $request->accion;
         $productoId = $request->productoId;
+        $sucursalId = $request->sucursalId;
         $estado = "";
 
         if ($accion == "activar") {
@@ -252,14 +278,17 @@ class productoController extends Controller
         error_log('accion=>' . $accion);
         error_log('estado=>' . $estado);
         error_log('productoId=>' . $productoId);
+        error_log('sucursalId=>' . $sucursalId);
 
-        producto::where('id', '=', $productoId)->update(['estado' => $estado]);
-        error_log('producto=>' . 'QUI LLEG');
+        $ps = productoSucursal::where('producto_id', '=', $productoId)
+            ->where('sucursal_id', '=', $sucursalId)
+            ->update(['estado' => $estado]);
 
-        //TODO: no funciona mensaje de exito
-        return view('eliminar', [
-            'mensaje' => 'Producto "' . $productoId . '" actualizado exitosamente!',
-        ]);
+        $producto = producto::where('id', '=', $productoId)->first();
+
+        $mensajeExito = 'Producto "' . $producto->codigo . '" actualizado exitosamente!';
+
+        throw new Exception($mensajeExito);
     }
 
 }
