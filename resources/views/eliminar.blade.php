@@ -17,9 +17,12 @@
                         Sucursal(es):
                         <select name="sucursal">
                             <option value="todas">Todas</option>
-                            <option value="1">Las Higueras</option>
-                            <option value="2">Los Sauces</option>
-                            <option value="3">Los Ulmos</option>
+
+                            @isset($sucursales)
+                                @foreach ($sucursales as $sucursal)
+                                    <option value={{ $sucursal->id }}>{{ $sucursal->name }}</option>
+                                @endforeach
+                            @endisset
                         </select>
                     </p>
                 </div>

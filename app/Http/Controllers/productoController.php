@@ -17,7 +17,9 @@ class productoController extends Controller
 
     public function eliminar()
     {
-        return view('eliminar');
+        return view('eliminar', [
+            'sucursales' => $this->obtenerSucursales(),
+        ]);
     }
 
     public function agregar()
@@ -46,30 +48,48 @@ class productoController extends Controller
         return 'Codigo' . $request->input('codigo');
     }
 
+    public function obtenerSucursales()
+    {
+        return sucursal::all();
+    }
+
     public function verConsulta(Request $request)
     {
         $codigo = $request->codigo;
         $name = $request->name;
+        $sucursalId = $request->sucursal;
+
+        $productosExistentes = null;
+        $producto = null;
 
         if ($codigo == null && $name == null) {
-            return back()->withErrors(['errors' => 'debes ingresar el codigo o el nombre']);
+            $productosExistentes = productoSucursal::all()
+                ->load('sucursal')->load('producto');
         }
-
-        $productosExistentes = [];
 
         if ($codigo != null) {
             $producto = producto::where('codigo', '=', $codigo)->first();
         }
 
-        $productosExistentes = productoSucursal::where('producto_id', '=', $producto->id)
-            ->get()
-            ->load('sucursal')->load('producto');
+        if ($name != null) {
+            $producto = producto::where('name', '=', $name)->first();
+        }
 
-        error_log($productosExistentes);
+        if ($producto != null) {
+            if ($sucursalId == 'todas') {
+                $productosExistentes = productoSucursal::where('producto_id', '=', $producto->id)
+                    ->get()
+                    ->load('sucursal')->load('producto');
+            } else {
+                $productosExistentes = productoSucursal::where('producto_id', '=', $producto->id)
+                    ->where('sucursal_id', '=', $sucursalId)
+                    ->get()
+                    ->load('sucursal')->load('producto');
+            }
+        }
 
         if ($productosExistentes == null || count($productosExistentes) == 0) {
-            //enviar error 'producto no existe'
-            $mensajeError = 'producto no existe: ' . $codigo;
+            $mensajeError = 'Producto no existe: ' . $codigo;
             error_log($mensajeError);
             return back()->withErrors(['errors' => $mensajeError]);
         }
@@ -82,13 +102,11 @@ class productoController extends Controller
 
     public function guardarAgregar(Request $request)
     {
-
         $this->validate($request, [
             'codigo' => 'required',
             'nombre' => 'required|min:3',
             'cantidad' => 'required',
         ]);
-
     }
 
     public function agregarProducto(Request $request)
@@ -185,17 +203,24 @@ class productoController extends Controller
                 $productosExistentes = $this->buscarProductos($request);
                 return view('eliminar', [
                     'productosExistentes' => $productosExistentes,
+                    'sucursales' => $this->obtenerSucursales(),
                 ]);
             }
 
             if ($accion == 'desactivar' || $accion == 'activar') {
                 $this->cambiarEstado($request);
-                return view('eliminar', ['request' => $request]);
+                return view('eliminar', [
+                    'request' => $request,
+                    'sucursales' => $this->obtenerSucursales(),
+                ]);
             }
 
             if ($accion == 'eliminar') {
                 $this->eliminarProducto($request);
-                return view('eliminar', ['request' => $request]);
+                return view('eliminar', [
+                    'request' => $request,
+                    'sucursales' => $this->obtenerSucursales(),
+                ]);
             }
 
         } catch (Exception $e) {
@@ -316,7 +341,6 @@ class productoController extends Controller
             }
 
             if ($sucursalId == 'todas') {
-                //
                 producto::where('id', $producto->id)->delete();
             } else {
                 productoSucursal::where('producto_id', $producto->id)
