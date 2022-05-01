@@ -15,22 +15,28 @@ class insertar_productos_sucursales extends Seeder
     public function run()
     {
         //
-        for ($i=1; $i < 10 ; $i++) { 
+        for ($i = 1; $i < 10; $i++) {
             DB::table('productos_sucursal')->insert(array(
-                'producto_id' => $this->obtenerProducto (),
-                'sucursal_id' => $this->obtenerSucursal (),
-                
-            ));# code...
+                'producto_id' => $this->obtenerProducto($i),
+                'sucursal_id' => $this->obtenerSucursal($i),
+
+            )); # code...
         }
         $this->command->info('Productos insertados con exito!');
     }
-    public function obtenerProducto(){
-        return rand(1,9);
-        }
-        
-        public function obtenerSucursal(){
-        return rand(1,3);
-}
+    public function obtenerProducto($i)
+    {
+        // return rand(1, 9);
+        return $i;
+    }
 
+    public function obtenerSucursal($i)
+    {
+        // if ($i <= 3) {
+        // return $i;
+        // }
+
+        return rand(1, 3);
+    }
 
 }

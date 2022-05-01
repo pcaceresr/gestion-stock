@@ -57,30 +57,11 @@ class productoController extends Controller
 
         $productosExistentes = [];
 
-        // $producto = producto::where(
-        //     function ($query) use ($codigo, $name) {
-
-        //         echo $codigo;
-        //         echo $name;
-        //         if ($codigo != null) {
-        //             $query->where('codigo', '=', $codigo);
-        //         }
-
-        //         if ($name != null) {
-        //             $query->where('name', 'like', $name . '%');
-        //         }
-
-        //     })
-        //     ->first();
 
         if ($codigo != null) {
             $producto = producto::where('codigo', '=', $codigo)->first();
         }
 
-        // if ($name != null) {
-        //     error_log($name);
-        //     $producto = producto::where('name', '=', $name)->first();
-        // }
 
         $productosExistentes = productoSucursal::where('producto_id', '=', $producto->id)
             ->get()
@@ -135,7 +116,6 @@ class productoController extends Controller
                 $producto->codigo = $request->codigo;
                 $producto->name = $request->name;
                 $producto->descripcion = $request->descripcion;
-                $producto->estado = 'ACTIVO';
                 $producto->categoria_id = $request->categoria_id;
                 $producto->save();
 
@@ -143,6 +123,7 @@ class productoController extends Controller
                 $productoSucursal->sucursal_id = $request->sucursal_id;
                 $productoSucursal->cantidad = $request->cantidad;
                 $productoSucursal->precioVenta = $request->precioVenta;
+                $productoSucursal->estado = 'ACTIVO';
 
                 $producto->productosSucursal()->save($productoSucursal);
 
@@ -154,6 +135,7 @@ class productoController extends Controller
                 $productoSucursal->sucursal_id = $request->sucursal_id;
                 $productoSucursal->cantidad = $request->cantidad;
                 $productoSucursal->precioVenta = $request->precioVenta;
+                $productoSucursal->estado = 'ACTIVO';
                 $productoSucursal->save();
 
             }

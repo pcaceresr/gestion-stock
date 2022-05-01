@@ -63,7 +63,7 @@
                             <td>{{ $ps->producto->descripcion }}</td>
                             <td>{{ $ps->precioVenta }}</td>
                             <td>{{ $ps->sucursal->name }}</td>
-                            <td>{{ $ps->producto->estado }}</td>
+                            <td>{{ $ps->estado }}</td>
                         </tr>
                     @endforeach
                 @endisset
