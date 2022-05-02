@@ -195,12 +195,14 @@ class productoController extends Controller
 
     public function verEliminar(Request $request)
     {
+        error_log($request);
         $accion = $request->accion;
 
         try {
 
             if ($accion == 'buscar') {
                 $productosExistentes = $this->buscarProductos($request);
+                error_log($productosExistentes);
                 return view('eliminar', [
                     'productosExistentes' => $productosExistentes,
                     'sucursales' => $this->obtenerSucursales(),
