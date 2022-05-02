@@ -2,7 +2,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
 class CreateProductosSucursalTable extends Migration
 {
     /**
@@ -25,6 +24,7 @@ class CreateProductosSucursalTable extends Migration
             $table->integer('cantidad')->nullable();
             $table->integer('precioVenta')->nullable();
             $table->primary(['producto_id', 'sucursal_id']);
+            $table->string('estado')->nullable();
         });
     }
     /**

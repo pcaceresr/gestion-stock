@@ -9,7 +9,7 @@
             <form action="{{ url('/menu/consultar') }}" method="post">
                 <div class="mb-3">
                     &nbsp &nbsp<label for="" class="form-label">Codigo del producto:
-                        <input type="text" class="form-control" id="codigo" name="codigo" value=''>
+                        <input type="text" class="form-control" id="codigo" name="codigo">
                 </div>
                 <div class="mb-3">
                     &nbsp &nbsp<label for="" class="form-label">Nombre del producto:
@@ -19,10 +19,10 @@
                     <p>
                         Sucursal(es):
                         <select name="sucursal">
-                            <option>Todas</option>
-                            <option>Las Higueras</option>
-                            <option>Los Sauces</option>
-                            <option>Los Ulmos</option>
+                            <option value="todas">Todas</option>
+                            <option value="1">Las Higueras</option>
+                            <option value="2">Los Sauces</option>
+                            <option value="3">Los Ulmos</option>
                         </select>
                     </p>
                 </div>
@@ -63,7 +63,7 @@
                             <td>{{ $ps->producto->descripcion }}</td>
                             <td>{{ $ps->precioVenta }}</td>
                             <td>{{ $ps->sucursal->name }}</td>
-                            <td>{{ $ps->producto->estado }}</td>
+                            <td>{{ $ps->estado }}</td>
                         </tr>
                     @endforeach
                 @endisset

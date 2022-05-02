@@ -27,3 +27,4 @@ class CreateSucursalesTable extends Migration
         Schema::dropIfExists('sucursales');
     }
 }
+
