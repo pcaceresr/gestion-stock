@@ -294,6 +294,7 @@ class productoController extends Controller
         }
     }
 
+
     public function cambiarEstado(Request $request)
     {
         //actualizar estado de producto por producto_id
@@ -323,6 +324,7 @@ class productoController extends Controller
 
         throw new Exception($mensajeExito);
     }
+
 
     public function eliminarProducto(Request $request)
     {
@@ -356,6 +358,73 @@ class productoController extends Controller
         } catch (Exception $e) {
             throw $e;
         }
+    }
+
+    public function verActualizar(Request $request)
+    {   
+
+        {
+            error_log($request);
+            $accion = $request->accion;
+    
+            try {
+    
+                if ($accion == 'buscar') {
+                    $productosExistentes = $this->buscarProductos($request);
+                    error_log($productosExistentes);
+                    return view('actualizar', [
+                        'productosExistentes' => $productosExistentes,
+                        'sucursales' => $this->obtenerSucursales(),
+                    ]);
+                }
+    
+            
+    
+            } catch (Exception $e) {
+    
+                error_log($e->getMessage());
+                error_log($e->getCode());
+    
+                $mensajeError = $e->getMessage();
+    
+                if ($e->getCode() == '23000') {
+                    $mensajeError = 'Producto ya existe en esta sucursal';
+                }
+    
+                return back()->withErrors(['errors' => $mensajeError]);
+            }
+        }
+    } 
+
+    
+    public function actualizarEstado(Request $request)
+    {
+        //actualizar estado de producto por producto_id
+        $accion = $request->accion;
+        $productoId = $request->productoId;
+        $sucursalId = $request->sucursalId;
+        $estado = "";
+
+        if ($accion == "editar") {
+            $estado = "ACTIVO";
+        } else {
+            $estado = "DESACTIVADO";
+        }
+
+        error_log('accion=>' . $accion);
+        error_log('estado=>' . $estado);
+        error_log('productoId=>' . $productoId);
+        error_log('sucursalId=>' . $sucursalId);
+
+        $ps = productoSucursal::where('producto_id', '=', $productoId)
+            ->where('sucursal_id', '=', $sucursalId)
+            ->update(['estado' => $estado]);
+
+        $producto = producto::where('id', '=', $productoId)->first();
+
+        $mensajeExito = 'Producto "' . $producto->codigo . '" actualizado exitosamente!';
+
+        throw new Exception($mensajeExito);
     }
 
 }

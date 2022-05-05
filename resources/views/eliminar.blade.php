@@ -11,13 +11,11 @@
                     &nbsp &nbsp<label for="" class="form-label">Codigo del producto:
                         <input type="text" class="form-control" id="codigo" name="codigo">
                 </div>
-
                 <div class="mb-3">
                     <p>
                         Sucursal(es):
                         <select name="sucursal">
                             <option value="todas">Todas</option>
-
                             @isset($sucursales)
                                 @foreach ($sucursales as $sucursal)
                                     <option value={{ $sucursal->id }}>{{ $sucursal->name }}</option>
