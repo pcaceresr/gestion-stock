@@ -32,7 +32,7 @@ Route::get('/menu/agregar', ['uses' => 'App\Http\Controllers\productoController@
 Route::post('/menu/agregar', 'App\Http\Controllers\productoController@agregarProducto');
 
 Route::get('/menu/actualizar', ['uses' => 'App\Http\Controllers\productoController@actualizar']);
-Route::post('/actualizar', ['uses' => 'App\Http\Controllers\productoController@verActualizar']);
+Route::post('/menu/actualizar', ['uses' => 'App\Http\Controllers\productoController@verActualizar']);
 
 Route::get('/menu/consultar', ['uses' => 'App\Http\Controllers\productoController@consultar']);
 Route::post('/menu/consultar', ['uses' => 'App\Http\Controllers\productoController@verConsulta']);

@@ -29,7 +29,17 @@ class productoController extends Controller
 
     public function actualizar()
     {
-        return view('actualizar');
+        return view('actualizar', [
+            'productoExistente' => $this->inicializarProductoExistente(),
+        ]);
+    }
+
+    public function inicializarProductoExistente()
+    {
+        $productoExistente = new productoSucursal();
+        $productoExistente->producto = new producto();
+        $productoExistente->sucursal = new sucursal();
+        return $productoExistente;
     }
 
     public function consultar()
@@ -51,6 +61,20 @@ class productoController extends Controller
     public function obtenerSucursales()
     {
         return sucursal::all();
+    }
+
+    public function obtenerSucursalesPorProducto($productoId)
+    {
+        $productoSucursal = productoSucursal::where('producto_id', '=', $productoId)
+            ->get()
+            ->load('sucursal');
+
+        $sucursales = [];
+        foreach ($productoSucursal as $ps) {
+            array_push($sucursales, $ps->sucursal);
+        }
+        // error_log(implode($sucursales));
+        return $sucursales;
     }
 
     public function verConsulta(Request $request)
@@ -294,7 +318,6 @@ class productoController extends Controller
         }
     }
 
-
     public function cambiarEstado(Request $request)
     {
         //actualizar estado de producto por producto_id
@@ -324,7 +347,6 @@ class productoController extends Controller
 
         throw new Exception($mensajeExito);
     }
-
 
     public function eliminarProducto(Request $request)
     {
@@ -361,70 +383,93 @@ class productoController extends Controller
     }
 
     public function verActualizar(Request $request)
-    {   
-
+    {
         {
             error_log($request);
             $accion = $request->accion;
-    
+            $productoId = $request->productoId;
+            $sucursalId = $request->sucursalId;
+
             try {
-    
+
                 if ($accion == 'buscar') {
                     $productosExistentes = $this->buscarProductos($request);
                     error_log($productosExistentes);
                     return view('actualizar', [
                         'productosExistentes' => $productosExistentes,
+                        'productoExistente' => $this->inicializarProductoExistente(),
                         'sucursales' => $this->obtenerSucursales(),
                     ]);
                 }
-    
-            
-    
+
+                if ($accion == 'editar') {
+                    $productoExistente = $this->buscarProducto($productoId, $sucursalId);
+                    error_log($productoExistente);
+                    return view('actualizar', [
+                        'productoExistente' => $productoExistente,
+                        'sucursales' => $this->obtenerSucursalesPorProducto($productoId),
+                    ]);
+                }
+
+                if ($accion == 'actualizar') {
+                    //validar datos de entrada
+                    $productoId = $request->productoId;
+                    $sucursalId = $request->sucursal;
+                    $codigo = $request->codigo;
+                    $name = $request->name;
+                    $descripcion = $request->descripcion;
+                    $precioVenta = $request->precioVenta;
+
+                    producto::where('id', '=', $productoId)
+                        ->update(['codigo' => $codigo,
+                            'name' => $name,
+                            'descripcion' => $descripcion]);
+
+                    if ($sucursalId == 'todas') {
+                        productoSucursal::where('producto_id', '=', $productoId)
+                            ->update(['precioVenta' => $precioVenta]);
+                    } else {
+                        productoSucursal::where('producto_id', '=', $productoId)
+                            ->where('sucursal_id', '=', $sucursalId)
+                            ->update(['precioVenta' => $precioVenta,
+                            ]);
+                    }
+
+                    //codigo=codigo2&name=producto2&descripcion=&precio=&sucursal=1&accion=actualizar
+
+                    error_log('actualizar=>' . $request);
+                    // return back();
+                    return back()->withErrors(['errors' => 'Producto "' . $codigo . '" Actualizado con éxito!']);
+                }
+
             } catch (Exception $e) {
-    
+
                 error_log($e->getMessage());
                 error_log($e->getCode());
-    
+
                 $mensajeError = $e->getMessage();
-    
+
                 if ($e->getCode() == '23000') {
                     $mensajeError = 'Producto ya existe en esta sucursal';
                 }
-    
+
                 return back()->withErrors(['errors' => $mensajeError]);
             }
         }
-    } 
+    }
 
-    
-    public function actualizarEstado(Request $request)
+    public function buscarProducto($productoId, $sucursalId)
     {
-        //actualizar estado de producto por producto_id
-        $accion = $request->accion;
-        $productoId = $request->productoId;
-        $sucursalId = $request->sucursalId;
-        $estado = "";
-
-        if ($accion == "editar") {
-            $estado = "ACTIVO";
-        } else {
-            $estado = "DESACTIVADO";
+        if ($productoId == null && $sucursalId == null) {
+            throw new Exception('Ingresar codigo de producto');
         }
 
-        error_log('accion=>' . $accion);
-        error_log('estado=>' . $estado);
-        error_log('productoId=>' . $productoId);
-        error_log('sucursalId=>' . $sucursalId);
-
-        $ps = productoSucursal::where('producto_id', '=', $productoId)
+        $productoExistente = productoSucursal::where('producto_id', '=', $productoId)
             ->where('sucursal_id', '=', $sucursalId)
-            ->update(['estado' => $estado]);
+            ->firstOrFail()
+            ->load('sucursal')->load('producto');
 
-        $producto = producto::where('id', '=', $productoId)->first();
-
-        $mensajeExito = 'Producto "' . $producto->codigo . '" actualizado exitosamente!';
-
-        throw new Exception($mensajeExito);
+        return $productoExistente;
     }
 
 }
