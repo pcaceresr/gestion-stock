@@ -24,7 +24,9 @@ class productoController extends Controller
 
     public function agregar()
     {
-        return view('agregar');
+        return view('agregar', [
+            'sucursales' => $this->obtenerSucursales(),
+        ]);
     }
 
     public function actualizar()
@@ -142,8 +144,9 @@ class productoController extends Controller
             'categoria_id' => 'required',
             'cantidad' => 'required',
             'precioVenta' => 'required',
-            'sucursal_id' => 'required',
+            'sucursal' => 'required',
         ]);
+   
 
         //si producto existe obtener el id; si no almacernarlo.
         $productoExistente = producto::where('codigo', '=', $request->codigo)->first();
@@ -160,7 +163,7 @@ class productoController extends Controller
                 $producto->save();
 
                 $productoSucursal = new productoSucursal();
-                $productoSucursal->sucursal_id = $request->sucursal_id;
+                $productoSucursal->sucursal_id = $request->sucursal;
                 $productoSucursal->cantidad = $request->cantidad;
                 $productoSucursal->precioVenta = $request->precioVenta;
                 $productoSucursal->estado = 'ACTIVO';
@@ -172,7 +175,7 @@ class productoController extends Controller
                 //se crea solamente en el NAV
                 $productoSucursal = new productoSucursal();
                 $productoSucursal->producto_id = $productoExistente->id;
-                $productoSucursal->sucursal_id = $request->sucursal_id;
+                $productoSucursal->sucursal_id = $request->sucursal;
                 $productoSucursal->cantidad = $request->cantidad;
                 $productoSucursal->precioVenta = $request->precioVenta;
                 $productoSucursal->estado = 'ACTIVO';
@@ -216,6 +219,7 @@ class productoController extends Controller
 
         return 'Codigo' . $request->input('codigo');
     }
+    
 
     public function verEliminar(Request $request)
     {

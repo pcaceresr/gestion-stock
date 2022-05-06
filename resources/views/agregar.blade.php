@@ -37,20 +37,19 @@
                     &nbsp &nbsp<label for="" class="form-label">Precio de Venta:
                         <input type="number" class="form-control" id="precioVenta" name="precioVenta">
                 </div>
-                <div>
+                <div class="mb-3">
                     <p>
-                        Sucursal:
-                        <select name="sucursal_id">
-                            <option value="1">Las Higueras</option>
-                            <option value="2">Los Sauces</option>
-                            <option value="3">Los Ulmos</option>
+                        Sucursal(es):
+                        <select name="sucursal">
+                            <option value="todas">Todas</option select>
+                            @isset($sucursales)
+                                @foreach ($sucursales as $sucursal)
+                                    @if ($sucursal->id)
+                                        <option value={{ $sucursal->id }}>{{ $sucursal->name }}</option>
+                                    @endif
+                                @endforeach
+                            @endisset
                         </select>
-                        {{-- <select class="form-control">
-                            @foreach ($listTeam as $team)
-                              <option>{{$team->NomComplet}}</option>
-                              @endforeach
-                          </select> --}}
-
                     </p>
                 </div>
                 <button type="submit" class="btn btn-primary">Agregar</button>
