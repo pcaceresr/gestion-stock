@@ -16,14 +16,18 @@
                         <input type="text" class="form-control" id="name" name="name">
                 </div>
                 <div class="mb-3">
-                    &nbsp &nbsp<label for="" class="form-label">Categoria:
+                    <p>
+                        Categoria:
                         <select name="categoria_id">
-                            <option value="1">categoria1</option>
-                            <option value="2">categoria2</option>
-                            <option value="3">categoria3</option>
+                            @isset($categorias)
+                                @foreach ($categorias as $categoria)
+                                    @if ($categoria->id)
+                                        <option value={{ $categoria->id }}>{{ $categoria->name }}</option>
+                                    @endif
+                                @endforeach
+                            @endisset
                         </select>
-
-
+                    </p>
                 </div>
                 <div class="mb-3">
                     &nbsp &nbsp<label for="" class="form-label">Descripción:
@@ -41,7 +45,6 @@
                     <p>
                         Sucursal(es):
                         <select name="sucursal">
-                            <option value="todas">Todas</option select>
                             @isset($sucursales)
                                 @foreach ($sucursales as $sucursal)
                                     @if ($sucursal->id)
@@ -62,6 +65,12 @@
                         </ul>
                     </div>
                 @endif
+
+                @isset($mensajeExito)
+                    <div class="alert-success">
+                        <p>{{ $mensajeExito }}</p>
+                    </div>
+                @endisset
 
 
                 <a href="{{ action('App\Http\Controllers\productoController@producto') }}" type="submit"

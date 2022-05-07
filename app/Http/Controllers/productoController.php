@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\categoria;
 use App\Models\producto;
 use App\Models\productoSucursal;
 use App\Models\sucursal;
@@ -26,6 +27,7 @@ class productoController extends Controller
     {
         return view('agregar', [
             'sucursales' => $this->obtenerSucursales(),
+            'categorias' => $this->obtenerCategorias(),
         ]);
     }
 
@@ -46,7 +48,9 @@ class productoController extends Controller
 
     public function consultar()
     {
-        return view('consultar');
+        return view('consultar', [
+            'sucursales' => $this->obtenerSucursales(),
+        ]);
     }
 
     public function guardarConsultar(Request $request)
@@ -65,6 +69,11 @@ class productoController extends Controller
         return sucursal::all();
     }
 
+    public function obtenerCategorias()
+    {
+        return categoria::all();
+    }
+
     public function obtenerSucursalesPorProducto($productoId)
     {
         $productoSucursal = productoSucursal::where('producto_id', '=', $productoId)
@@ -79,61 +88,14 @@ class productoController extends Controller
         return $sucursales;
     }
 
-    public function verConsulta(Request $request)
-    {
-        $codigo = $request->codigo;
-        $name = $request->name;
-        $sucursalId = $request->sucursal;
-
-        $productosExistentes = null;
-        $producto = null;
-
-        if ($codigo == null && $name == null) {
-            $productosExistentes = productoSucursal::all()
-                ->load('sucursal')->load('producto');
-        }
-
-        if ($codigo != null) {
-            $producto = producto::where('codigo', '=', $codigo)->first();
-        }
-
-        if ($name != null) {
-            $producto = producto::where('name', '=', $name)->first();
-        }
-
-        if ($producto != null) {
-            if ($sucursalId == 'todas') {
-                $productosExistentes = productoSucursal::where('producto_id', '=', $producto->id)
-                    ->get()
-                    ->load('sucursal')->load('producto');
-            } else {
-                $productosExistentes = productoSucursal::where('producto_id', '=', $producto->id)
-                    ->where('sucursal_id', '=', $sucursalId)
-                    ->get()
-                    ->load('sucursal')->load('producto');
-            }
-        }
-
-        if ($productosExistentes == null || count($productosExistentes) == 0) {
-            $mensajeError = 'Producto no existe: ' . $codigo;
-            error_log($mensajeError);
-            return back()->withErrors(['errors' => $mensajeError]);
-        }
-
-        return view('consultar', [
-            'productosExistentes' => $productosExistentes,
-        ]);
-
-    }
-
-    public function guardarAgregar(Request $request)
-    {
-        $this->validate($request, [
-            'codigo' => 'required',
-            'nombre' => 'required|min:3',
-            'cantidad' => 'required',
-        ]);
-    }
+    // public function guardarAgregar(Request $request)
+    // {
+    //     $this->validate($request, [
+    //         'codigo' => 'required',
+    //         'nombre' => 'required|min:3',
+    //         'cantidad' => 'required',
+    //     ]);
+    // }
 
     public function agregarProducto(Request $request)
     {
@@ -146,7 +108,6 @@ class productoController extends Controller
             'precioVenta' => 'required',
             'sucursal' => 'required',
         ]);
-   
 
         //si producto existe obtener el id; si no almacernarlo.
         $productoExistente = producto::where('codigo', '=', $request->codigo)->first();
@@ -194,8 +155,10 @@ class productoController extends Controller
 
             return back()->withErrors(['errors' => $mensajeError]);
         }
-        return back()->withErrors(['errors' => 'Producto "' . $request->input('codigo') . '" ingresado exitosamente!']);
 
+        $mensajeExito = 'Producto "' . $request->input('codigo') . '" ingresado exitosamente!';
+
+        return view('agregar', ['mensajeExito' => $mensajeExito]);
     }
 
     public function guardarEliminar(Request $request)
@@ -219,7 +182,6 @@ class productoController extends Controller
 
         return 'Codigo' . $request->input('codigo');
     }
-    
 
     public function verEliminar(Request $request)
     {
@@ -474,6 +436,38 @@ class productoController extends Controller
             ->load('sucursal')->load('producto');
 
         return $productoExistente;
+    }
+
+    public function verConsulta(Request $request)
+    {
+        error_log($request);
+        $accion = $request->accion;
+
+        try {
+
+            if ($accion == 'buscar') {
+                $productosExistentes = $this->buscarProductos($request);
+                error_log($productosExistentes);
+                return view('consultar', [
+                    'productosExistentes' => $productosExistentes,
+                    'sucursales' => $this->obtenerSucursales(),
+                ]);
+            }
+
+        } catch (Exception $e) {
+
+            error_log($e->getMessage());
+            error_log($e->getCode());
+
+            $mensajeError = $e->getMessage();
+
+            if ($e->getCode() == '23000') {
+                $mensajeError = 'Producto ya existe en esta sucursal';
+            }
+
+            return back()->withErrors(['errors' => $mensajeError]);
+        }
+
     }
 
 }
