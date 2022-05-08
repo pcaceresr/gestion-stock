@@ -158,7 +158,9 @@ class productoController extends Controller
 
         $mensajeExito = 'Producto "' . $request->input('codigo') . '" ingresado exitosamente!';
 
-        return view('agregar', ['mensajeExito' => $mensajeExito]);
+        return view('agregar', ['mensajeExito' => $mensajeExito,
+            'sucursales' => $this->obtenerSucursales(),
+            'categorias' => $this->obtenerCategorias()]);
     }
 
     public function guardarEliminar(Request $request)
@@ -400,8 +402,6 @@ class productoController extends Controller
                             ->update(['precioVenta' => $precioVenta,
                             ]);
                     }
-
-                    //codigo=codigo2&name=producto2&descripcion=&precio=&sucursal=1&accion=actualizar
 
                     error_log('actualizar=>' . $request);
                     // return back();
