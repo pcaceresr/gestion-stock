@@ -84,18 +84,9 @@ class productoController extends Controller
         foreach ($productoSucursal as $ps) {
             array_push($sucursales, $ps->sucursal);
         }
-        // error_log(implode($sucursales));
+
         return $sucursales;
     }
-
-    // public function guardarAgregar(Request $request)
-    // {
-    //     $this->validate($request, [
-    //         'codigo' => 'required',
-    //         'nombre' => 'required|min:3',
-    //         'cantidad' => 'required',
-    //     ]);
-    // }
 
     public function agregarProducto(Request $request)
     {
@@ -407,6 +398,7 @@ class productoController extends Controller
 
                 if ($accion == 'actualizar') {
                     //validar datos de entrada
+                    error_log('actualizar=>' . $request);
                     $productoId = $request->productoId;
                     $sucursalId = $request->sucursal;
                     $codigo = $request->codigo;

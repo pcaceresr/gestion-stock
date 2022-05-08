@@ -25,11 +25,12 @@
                 <div class="mb-3">
                     &nbsp &nbsp<label for="" class="form-label">Descripción:
                         <input type="text" class="form-control" id="descripcion" name="descripcion"
-                            value={{ $productoExistente->producto->descripcion }}>
+                            value="{{ $productoExistente->producto->descripcion }}">
+
                 </div>
                 <div class="mb-3">
                     &nbsp &nbsp<label for="" class="form-label">Precio de Venta:
-                        <input type="number" class="form-control" id="precio" name="precio"
+                        <input type="number" class="form-control" id="precioVenta" name="precioVenta"
                             value={{ $productoExistente->precioVenta }}>
                 </div>
                 <div class="mb-3">
