@@ -28,3 +28,4 @@ insert into productos_sucursal  values (34, 1, "2022-04-22 23:30:51", "2022-04-2
 insert into productos_sucursal (producto_id, sucursal_id, updated_at,created_at) values (18, 1, "2022-04-22 23:30:51", "2022-04-22 23:30:51");
 
 
+select * from sucursales;

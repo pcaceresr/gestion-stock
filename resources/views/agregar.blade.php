@@ -16,14 +16,18 @@
                         <input type="text" class="form-control" id="name" name="name">
                 </div>
                 <div class="mb-3">
-                    &nbsp &nbsp<label for="" class="form-label">Categoria:
+                    <p>
+                        Categoria:
                         <select name="categoria_id">
-                            <option value="1">categoria1</option>
-                            <option value="2">categoria2</option>
-                            <option value="3">categoria3</option>
+                            @isset($categorias)
+                                @foreach ($categorias as $categoria)
+                                    @if ($categoria->id)
+                                        <option value={{ $categoria->id }}>{{ $categoria->name }}</option>
+                                    @endif
+                                @endforeach
+                            @endisset
                         </select>
-
-
+                    </p>
                 </div>
                 <div class="mb-3">
                     &nbsp &nbsp<label for="" class="form-label">Descripción:
@@ -37,20 +41,18 @@
                     &nbsp &nbsp<label for="" class="form-label">Precio de Venta:
                         <input type="number" class="form-control" id="precioVenta" name="precioVenta">
                 </div>
-                <div>
+                <div class="mb-3">
                     <p>
-                        Sucursal:
-                        <select name="sucursal_id">
-                            <option value="1">Las Higueras</option>
-                            <option value="2">Los Sauces</option>
-                            <option value="3">Los Ulmos</option>
+                        Sucursal(es):
+                        <select name="sucursal">
+                            @isset($sucursales)
+                                @foreach ($sucursales as $sucursal)
+                                    @if ($sucursal->id)
+                                        <option value={{ $sucursal->id }}>{{ $sucursal->name }}</option>
+                                    @endif
+                                @endforeach
+                            @endisset
                         </select>
-                        {{-- <select class="form-control">
-                            @foreach ($listTeam as $team)
-                              <option>{{$team->NomComplet}}</option>
-                              @endforeach
-                          </select> --}}
-
                     </p>
                 </div>
                 <button type="submit" class="btn btn-primary">Agregar</button>
@@ -63,6 +65,12 @@
                         </ul>
                     </div>
                 @endif
+
+                @isset($mensajeExito)
+                    <div class="alert-success">
+                        <p>{{ $mensajeExito }}</p>
+                    </div>
+                @endisset
 
 
                 <a href="{{ action('App\Http\Controllers\productoController@producto') }}" type="submit"

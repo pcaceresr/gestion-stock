@@ -19,15 +19,19 @@
                     <p>
                         Sucursal(es):
                         <select name="sucursal">
-                            <option value="todas">Todas</option>
-                            <option value="1">Las Higueras</option>
-                            <option value="2">Los Sauces</option>
-                            <option value="3">Los Ulmos</option>
+                            <option value="todas">Todas</option select>
+                            @isset($sucursales)
+                                @foreach ($sucursales as $sucursal)
+                                    @if ($sucursal->id)
+                                        <option value={{ $sucursal->id }}>{{ $sucursal->name }}</option>
+                                    @endif
+                                @endforeach
+                            @endisset
                         </select>
                     </p>
                 </div>
                 <br>
-                <button type="submit" class="btn btn-primary">Consultar</button>
+                <button name="accion" value="buscar" type="submit" class="btn btn-primary">Consultar</button>
                 @if ($errors->any())
                     <div class="alert-danger">
                         <ul>
