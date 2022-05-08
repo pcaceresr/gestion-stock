@@ -63,7 +63,7 @@
                         <tr>
                             <td>{{ $ps->producto->codigo }}</td>
                             <td>{{ $ps->producto->name }}</td>
-                            <td>{{ $ps->producto->categoria_id }}</td>
+                            <td>{{ $ps->producto->categorias->name }}</td>
                             <td>{{ $ps->producto->descripcion }}</td>
                             <td>{{ $ps->precioVenta }}</td>
                             <td>{{ $ps->sucursal->name }}</td>

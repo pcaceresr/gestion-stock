@@ -240,6 +240,7 @@ class productoController extends Controller
             $sucursalId = $request->sucursal;
             $productosExistentes = [];
             $producto = new producto();
+            $name = $request->name;
 
             if ($codigo != null && $sucursalId == 'todas') {
 
@@ -251,7 +252,7 @@ class productoController extends Controller
                         ->load('sucursal')->load('producto');
                 }
 
-            } else if ($sucursalId != null && $codigo == null) {
+            } else if ($sucursalId != null && $codigo == null && $name == null) {
 
                 if ($sucursalId == 'todas') {
                     $productosExistentes = productoSucursal::all()
@@ -271,6 +272,31 @@ class productoController extends Controller
                         ->where('sucursal_id', '=', $sucursalId)
                         ->get()
                         ->load('sucursal')->load('producto');
+                }
+            } else if ($name != null && $sucursalId != null) {
+
+                $productos = producto::where('name', 'like', $name . '%')->get();
+
+                if ($productos != null) {
+                    foreach ($productos as $producto) {
+                        if ($sucursalId == 'todas') {
+                            $productosSucursal = productoSucursal::where('producto_id', '=', $producto->id)
+                                ->get()
+                                ->load('sucursal')
+                                ->load('producto');
+
+                        } else {
+                            $productosSucursal = productoSucursal::where('producto_id', '=', $producto->id)
+                                ->where('sucursal_id', '=', $sucursalId)
+                                ->get()
+                                ->load('sucursal')
+                                ->load('producto');
+                        }
+
+                        foreach ($productosSucursal as $ps) {
+                            array_push($productosExistentes, $ps);
+                        }
+                    }
                 }
             }
 
@@ -447,7 +473,7 @@ class productoController extends Controller
 
             if ($accion == 'buscar') {
                 $productosExistentes = $this->buscarProductos($request);
-                error_log($productosExistentes);
+                // error_log($productosExistentes);
                 return view('consultar', [
                     'productosExistentes' => $productosExistentes,
                     'sucursales' => $this->obtenerSucursales(),

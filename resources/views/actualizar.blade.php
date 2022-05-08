@@ -14,22 +14,22 @@
 
                 <div class="mb-3">
                     &nbsp &nbsp<label for="" class="form-label">Codigo del producto:
-                        <input type="text" class="form-control" id="codigo" name="codigo" 
+                        <input type="text" class="form-control" id="codigo" name="codigo"
                             value={{ $productoExistente->producto->codigo }}>
                 </div>
                 <div class="mb-3">
                     &nbsp &nbsp<label for="" class="form-label">Nombre del producto:
-                        <input type="text" class="form-control" id="name" name="name" 
+                        <input type="text" class="form-control" id="name" name="name"
                             value={{ $productoExistente->producto->name }}>
                 </div>
                 <div class="mb-3">
                     &nbsp &nbsp<label for="" class="form-label">Descripción:
-                        <input type="text" class="form-control" id="descripcion" name="descripcion" 
+                        <input type="text" class="form-control" id="descripcion" name="descripcion"
                             value={{ $productoExistente->producto->descripcion }}>
                 </div>
                 <div class="mb-3">
                     &nbsp &nbsp<label for="" class="form-label">Precio de Venta:
-                        <input type="number" class="form-control" id="precio" name="precio" 
+                        <input type="number" class="form-control" id="precio" name="precio"
                             value={{ $productoExistente->precioVenta }}>
                 </div>
                 <div class="mb-3">
@@ -92,7 +92,7 @@
                                     <td>{{ $ps->producto->id }}</td>
                                     <td>{{ $ps->producto->codigo }}</td>
                                     <td>{{ $ps->producto->name }}</td>
-                                    <td>{{ $ps->producto->categoria_id }}</td>
+                                    <td>{{ $ps->producto->categorias->name }}</td>
                                     <td>{{ $ps->producto->descripcion }}</td>
                                     <td>{{ $ps->precioVenta }}</td>
                                     <td>{{ $ps->sucursal->name }}</td>
